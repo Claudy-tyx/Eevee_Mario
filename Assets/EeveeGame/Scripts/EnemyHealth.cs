@@ -20,14 +20,12 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
     private bool isDead;
 
-    private GameOverUI gameOverUI;
     private CrystalManager crystalManager;
 
 
     private void Awake()
     {
         currentHealth = maxHealth;
-        gameOverUI = FindFirstObjectByType<GameOverUI>();
         crystalManager = FindFirstObjectByType<CrystalManager>();
     }
 
@@ -84,14 +82,24 @@ public class EnemyHealth : MonoBehaviour
             return;
 
         isDead = true;
-        if (gameOverUI != null)
+        // Register this kill with the persistent GameManager.
+        if (GameManager.Instance != null)
         {
-            gameOverUI.AddEnemyDefeated();
+            int mapNumber = 1;
+
+            if (crystalManager != null)
+            {
+                mapNumber = crystalManager.GetMapNumber();
+            }
+
+            GameManager.Instance.RegisterKill(mapNumber);
         }
 
+        // Tell the local CrystalManager to check whether
+        // this kill unlocked a crystal.
         if (crystalManager != null)
         {
-            crystalManager.RegisterKill();
+            crystalManager.CheckProgress();
         }
 
         // Stop Caterpie movement.
@@ -101,6 +109,33 @@ public class EnemyHealth : MonoBehaviour
         if (caterpieController != null)
         {
             caterpieController.enabled = false;
+        }
+
+        // Stop Bidoof movement.
+        BidoofController bidoofController =
+            GetComponent<BidoofController>();
+
+        if (bidoofController != null)
+        {
+            bidoofController.enabled = false;
+        }
+
+        // Stop Beedrill movement.
+        BeedrillController beedrillController =
+            GetComponent<BeedrillController>();
+
+        if (beedrillController != null)
+        {
+            beedrillController.enabled = false;
+        }
+
+        // Stop Murkrow movement.
+        MurkrowController murkrowController =
+            GetComponent<MurkrowController>();
+
+        if (murkrowController != null)
+        {
+            murkrowController.enabled = false;
         }
 
         // Stop Butterfree movement.
@@ -120,12 +155,7 @@ public class EnemyHealth : MonoBehaviour
             contactDamage.DisableDamage();
         }
 
-        if (contactDamage != null)
-        {
-            contactDamage.DisableDamage();
-        }
-
-        // Disable Caterpie's physical body collider.
+        // Disable enemy physical body collider.
         Collider2D bodyCollider =
             GetComponent<Collider2D>();
 

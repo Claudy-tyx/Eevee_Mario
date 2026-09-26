@@ -29,6 +29,13 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
+        // Load persistent max health from GameManager.
+        if (GameManager.Instance != null)
+        {
+            maxHealth = GameManager.Instance.GetMaxHealth();
+        }
+
+        // Enter each map at full health.
         currentHealth = maxHealth;
 
         // Automatically find PlayerController on the same object
@@ -97,6 +104,12 @@ public class PlayerHealth : MonoBehaviour
         isDead = true;
         isInvulnerable = true;
 
+        // Count this death for the current run.
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.RegisterDeath();
+        }
+
         // Play faint sound before disabling PlayerController.
         if (playerController != null)
         {
@@ -158,7 +171,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (healthUI != null)
         {
-            healthUI.SetHealth(currentHealth);
+            healthUI.SetHealth(currentHealth, maxHealth);
         }
 
         StartCoroutine(HealFlash());
@@ -179,6 +192,13 @@ public class PlayerHealth : MonoBehaviour
 
         currentHealth =
             Mathf.Min(currentHealth, maxHealth);
+
+        // Save the max health increase permanently
+        // for the current run.
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.IncreaseMaxHealth(amount);
+        }
 
         if (healthUI != null)
         {

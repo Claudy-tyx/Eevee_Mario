@@ -33,7 +33,7 @@ public class FlowerTrigger : MonoBehaviour
         PlayerController stayingPlayer =
             other.GetComponentInParent<PlayerController>();
 
-        // Ignore Caterpie, Butterfree, projectiles, etc.
+        // Ignore enemies, projectiles, etc.
         if (stayingPlayer == null || stayingPlayer != player)
             return;
 

@@ -299,8 +299,9 @@ public class PlayerController : MonoBehaviour
                 lifetimeMultiplier =
                     playerStats.GetSwiftLifetimeMultiplier();
 
-                // Directional Swift upgrade.
-                if (playerStats.HasDirectionalSwift())
+                // Directional Swift only controls aim when
+                if (playerStats.HasDirectionalSwift() &&
+                    !homingEnabled)
                 {
                     direction =
                         GetSwiftAimDirection();

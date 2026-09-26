@@ -28,6 +28,27 @@ public class PlayerStats : MonoBehaviour
         new HashSet<UpgradeType>();
 
 
+    private void Awake()
+    {
+        LoadPersistentUpgrades();
+    }
+
+
+    private void LoadPersistentUpgrades()
+    {
+        if (GameManager.Instance == null)
+            return;
+
+        List<UpgradeType> savedUpgrades =
+            GameManager.Instance.GetOwnedUpgrades();
+
+        foreach (UpgradeType upgrade in savedUpgrades)
+        {
+            ApplyUpgrade(upgrade, false);
+        }
+    }
+
+
     // ---------- GETTERS ----------
 
     public float GetMoveSpeedMultiplier()
@@ -81,13 +102,22 @@ public class PlayerStats : MonoBehaviour
         return ownedUpgrades.Contains(upgrade);
     }
 
-    public void ApplyUpgrade(UpgradeType upgrade)
+    public void ApplyUpgrade(
+        UpgradeType upgrade,
+        bool saveToGameManager = true
+    )
     {
         // Never apply the exact same upgrade twice.
         if (ownedUpgrades.Contains(upgrade))
             return;
 
         ownedUpgrades.Add(upgrade);
+
+        if (saveToGameManager &&
+            GameManager.Instance != null)
+        {
+            GameManager.Instance.RegisterUpgrade(upgrade);
+        }
 
         switch (upgrade)
         {

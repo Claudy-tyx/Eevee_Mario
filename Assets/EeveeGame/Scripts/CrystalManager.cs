@@ -9,7 +9,6 @@ public class CrystalManager : MonoBehaviour
     [SerializeField] private Transform[] spawnPoints;
 
     [Header("Crystal Progress")]
-    [SerializeField] private int firstCrystalKills = 5;
     [SerializeField] private int killsPerCrystal = 3;
 
     [Header("Audio")]
@@ -20,20 +19,33 @@ public class CrystalManager : MonoBehaviour
     [SerializeField] private CrystalArrowUI crystalArrowUI;
     [SerializeField] private UpgradeUI upgradeUI;
 
-    private int currentKills = 0;
-    private int nextCrystalKills;
+    [Header("Map")]
+    [SerializeField] private int mapNumber = 1;
+
+    public int GetMapNumber()
+    {
+        return mapNumber;
+    }
+
     private bool crystalSpawned = false;
     private GameObject activeCrystal;
 
 
     private void Start()
     {
-        nextCrystalKills = firstCrystalKills;
+        CheckProgress();
     }
 
-    public void RegisterKill()
+    public void CheckProgress()
     {
-        currentKills++;
+        if (GameManager.Instance == null)
+            return;
+
+        int currentKills =
+            GameManager.Instance.GetTotalKills();
+
+        int nextCrystalKills =
+            GameManager.Instance.GetNextCrystalKills();
 
         Debug.Log(
             "Crystal progress: " +
@@ -47,10 +59,17 @@ public class CrystalManager : MonoBehaviour
 
     private void CheckCrystalSpawn()
     {
-        // Don't spawn another crystal while one
-        // is already waiting to be collected.
         if (crystalSpawned)
             return;
+
+        if (GameManager.Instance == null)
+            return;
+
+        int currentKills =
+            GameManager.Instance.GetTotalKills();
+
+        int nextCrystalKills =
+            GameManager.Instance.GetNextCrystalKills();
 
         if (currentKills >= nextCrystalKills)
         {
@@ -138,14 +157,26 @@ public class CrystalManager : MonoBehaviour
         activeCrystal = null;
         crystalSpawned = false;
 
-        // Increase the requirement for the next crystal.
-        nextCrystalKills += killsPerCrystal;
+        // Record the collected crystal
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.RegisterCrystalCollected();
 
-        Debug.Log(
-            "Next crystal unlocks at " +
-            nextCrystalKills +
-            " total kills."
-        );
+            int nextCrystalKills =
+                GameManager.Instance.GetNextCrystalKills();
+
+            nextCrystalKills += killsPerCrystal;
+
+            GameManager.Instance.SetNextCrystalKills(
+                nextCrystalKills
+            );
+
+            Debug.Log(
+                "Next crystal unlocks at " +
+                nextCrystalKills +
+                " total kills."
+            );
+        }
 
         if (upgradeUI != null)
         {

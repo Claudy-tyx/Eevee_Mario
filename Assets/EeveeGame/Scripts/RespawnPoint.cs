@@ -25,13 +25,21 @@ public class RespawnPoint : MonoBehaviour
 
     private void Awake()
     {
-        warningRenderer =
-            gameObject.AddComponent<SpriteRenderer>();
+        // Only create a warning renderer for spawn points
+        // that actually use the warning effect.
+        if (!useSpawnWarning)
+            return;
 
-        warningRenderer.sprite = warningSprite;
-        warningRenderer.enabled = false;
+        // Reuse an existing SpriteRenderer if there is one.
+        warningRenderer = GetComponent<SpriteRenderer>();
 
-        // Copy sorting settings from the prefab.
+        if (warningRenderer == null)
+        {
+            warningRenderer =
+                gameObject.AddComponent<SpriteRenderer>();
+        }
+
+        // Copy sorting settings from the spawned prefab.
         if (prefabToSpawn != null)
         {
             SpriteRenderer prefabRenderer =
@@ -39,13 +47,16 @@ public class RespawnPoint : MonoBehaviour
 
             if (prefabRenderer != null)
             {
-                warningRenderer.sortingLayerID =
-                    prefabRenderer.sortingLayerID;
+                warningRenderer.sortingLayerName =
+                    prefabRenderer.sortingLayerName;
 
                 warningRenderer.sortingOrder =
                     prefabRenderer.sortingOrder;
             }
         }
+
+        warningRenderer.sprite = warningSprite;
+        warningRenderer.enabled = false;
     }
 
     private void Start()
