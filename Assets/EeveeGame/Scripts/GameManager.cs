@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     public event Action OnMap2Unlocked;
     public event Action OnMap3Unlocked;
 
-    private bool runStarted = false;
 
 
     // =========================

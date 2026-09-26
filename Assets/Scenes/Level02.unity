@@ -8874,7 +8874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CrystalArrowUI
   arrow: {fileID: 1855072693}
   canvas: {fileID: 335714147}
-  edgePadding: 120
+  edgePadding: 200
 --- !u!114 &335714151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58586,7 +58586,7 @@ PrefabInstance:
     - target: {fileID: 899895745969221183, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
       propertyPath: healthUI
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1523829812}
     - target: {fileID: 899895745969221183, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
       propertyPath: gameOverUI
       value: 

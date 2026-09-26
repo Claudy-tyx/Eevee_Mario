@@ -79,22 +79,12 @@ public class MapUnlockDialogue : MonoBehaviour
         if (!talking || !canAdvanceDialogue)
             return;
 
-        bool continuePressed = false;
+        if (Mouse.current == null)
+            return;
 
-        if (Keyboard.current != null &&
-            Keyboard.current.anyKey.wasPressedThisFrame)
-        {
-            continuePressed = true;
-        }
-
-        if (Mouse.current != null &&
-            (Mouse.current.leftButton.wasPressedThisFrame ||
-             Mouse.current.rightButton.wasPressedThisFrame))
-        {
-            continuePressed = true;
-        }
-
-        if (continuePressed)
+        // Only mouse clicks can close the path dialogue.
+        if (Mouse.current.leftButton.wasPressedThisFrame ||
+            Mouse.current.rightButton.wasPressedThisFrame)
         {
             EndDialogue();
         }
