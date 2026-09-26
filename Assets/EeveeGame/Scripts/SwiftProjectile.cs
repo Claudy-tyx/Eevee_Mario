@@ -15,11 +15,28 @@ public class SwiftProjectile : MonoBehaviour
     [Header("Hit Effect")]
     [SerializeField] private GameObject hitEffectPrefab;
 
+    [Header("Sound")]
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private float hitSoundVolume = 1f;
+
+    [Header("Homing")]
+    [SerializeField] private float homingRange = 6f;
+    [SerializeField] private float homingTurnSpeed = 180f;
+
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D projectileCollider;
 
+    private bool homingEnabled = false;
+    private Transform homingTarget;
+
     private Vector2 originalColliderOffset;
+
+    private int damage = 1;
+    private float currentSpeed;
+    private float currentLifetime;
+
+    private float originalFacingDirection;
 
 
     private void Awake()
@@ -37,28 +54,50 @@ public class SwiftProjectile : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, lifetime);
+        // Fallback values in case the projectile
+        // wasn't configured by PlayerController.
+        if (currentSpeed <= 0f)
+            currentSpeed = speed;
+
+        if (currentLifetime <= 0f)
+            currentLifetime = lifetime;
+
+        Destroy(gameObject, currentLifetime);
     }
 
 
-    public void SetDirection(bool facingRight)
+    public void SetDirection(Vector2 direction)
     {
-        float direction = facingRight ? 1f : -1f;
+        if (direction.sqrMagnitude <= 0.001f)
+            direction = Vector2.right;
 
-        rb.linearVelocity = new Vector2(
-            direction * speed,
-            0f
-        );
+        direction.Normalize();
 
-        spriteRenderer.flipX = !facingRight;
+        float moveSpeed =
+            currentSpeed > 0f
+            ? currentSpeed
+            : speed;
 
-        if (projectileCollider != null)
+        rb.linearVelocity =
+            direction * moveSpeed;
+
+        if (spriteRenderer != null)
         {
-            projectileCollider.offset = new Vector2(
-                Mathf.Abs(originalColliderOffset.x) * direction,
-                originalColliderOffset.y
-            );
+            spriteRenderer.flipX = false;
         }
+
+        float angle =
+            Mathf.Atan2(
+                direction.y,
+                direction.x
+            ) * Mathf.Rad2Deg;
+
+        transform.rotation =
+            Quaternion.Euler(
+                0f,
+                0f,
+                angle
+            );
     }
 
 
@@ -85,7 +124,7 @@ public class SwiftProjectile : MonoBehaviour
 
             if (enemy != null)
             {
-                enemy.TakeDamage(1);
+                enemy.TakeDamage(damage);
             }
 
             HitSomething();
@@ -100,6 +139,128 @@ public class SwiftProjectile : MonoBehaviour
         }
     }
 
+    public void Setup(
+        Vector2 direction,
+        int newDamage,
+        float speedMultiplier,
+        float lifetimeMultiplier,
+        bool newHomingEnabled
+    )
+    {
+        damage = newDamage;
+
+        homingEnabled = newHomingEnabled;
+
+        currentSpeed =
+            speed * speedMultiplier;
+
+        currentLifetime =
+            lifetime * lifetimeMultiplier;
+
+        originalFacingDirection =
+            direction.x >= 0f ? 1f : -1f;
+
+        SetDirection(direction);
+    }
+
+    private void FixedUpdate()
+    {
+        if (!homingEnabled)
+            return;
+
+        if (homingTarget == null)
+            FindHomingTarget();
+
+        if (homingTarget == null)
+            return;
+
+        Vector2 currentDirection =
+            rb.linearVelocity.normalized;
+
+        Vector2 targetDirection =
+            ((Vector2)homingTarget.position -
+            rb.position).normalized;
+
+        float currentAngle =
+            Mathf.Atan2(
+                currentDirection.y,
+                currentDirection.x
+            ) * Mathf.Rad2Deg;
+
+        float targetAngle =
+            Mathf.Atan2(
+                targetDirection.y,
+                targetDirection.x
+            ) * Mathf.Rad2Deg;
+
+        float newAngle =
+            Mathf.MoveTowardsAngle(
+                currentAngle,
+                targetAngle,
+                homingTurnSpeed *
+                Time.fixedDeltaTime
+            );
+
+        Vector2 newDirection =
+            new Vector2(
+                Mathf.Cos(newAngle * Mathf.Deg2Rad),
+                Mathf.Sin(newAngle * Mathf.Deg2Rad)
+            );
+
+        rb.linearVelocity =
+            newDirection * currentSpeed;
+
+        transform.rotation =
+            Quaternion.Euler(
+                0f,
+                0f,
+                newAngle
+            );
+    }
+
+    private void FindHomingTarget()
+    {
+        Collider2D[] hits =
+            Physics2D.OverlapCircleAll(
+                transform.position,
+                homingRange,
+                enemyLayers
+            );
+
+        Transform closestTarget = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider2D hit in hits)
+        {
+            EnemyHealth enemy =
+                hit.GetComponentInParent<EnemyHealth>();
+
+            if (enemy == null)
+                continue;
+
+            Vector2 toEnemy =
+                (Vector2)enemy.transform.position -
+                rb.position;
+
+            // Only target enemies on the side
+            // Eevee originally fired toward.
+            if (toEnemy.x * originalFacingDirection <= 0f)
+                continue;
+
+            float distance =
+                toEnemy.sqrMagnitude;
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestTarget =
+                    enemy.transform;
+            }
+        }
+
+        homingTarget = closestTarget;
+    }
+
 
     private void HitSomething()
     {
@@ -109,6 +270,15 @@ public class SwiftProjectile : MonoBehaviour
                 hitEffectPrefab,
                 transform.position,
                 Quaternion.identity
+            );
+        }
+
+        if (hitSound != null)
+        {
+            AudioSource.PlayClipAtPoint(
+                hitSound,
+                transform.position,
+                hitSoundVolume
             );
         }
 

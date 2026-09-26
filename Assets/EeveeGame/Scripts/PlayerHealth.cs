@@ -23,29 +23,33 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private GameOverUI gameOverUI;
     [SerializeField] private PlayerController playerController;
 
-    private bool isDead;
-
     private int currentHealth;
     private bool isInvulnerable;
-
+    private bool isDead;
 
     private void Awake()
     {
         currentHealth = maxHealth;
+
+        // Automatically find PlayerController on the same object
+        // if it wasn't assigned manually.
+        if (playerController == null)
+        {
+            playerController = GetComponent<PlayerController>();
+        }
     }
 
     private void Start()
     {
         if (healthUI != null)
         {
-            healthUI.SetHealth(currentHealth);
+            healthUI.SetHealth(currentHealth, maxHealth);
         }
     }
 
-
     public void TakeDamage(int damage)
     {
-        if (isInvulnerable)
+        if (isInvulnerable || isDead)
             return;
 
         currentHealth -= damage;
@@ -53,7 +57,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (healthUI != null)
         {
-            healthUI.SetHealth(currentHealth);
+            healthUI.SetHealth(currentHealth, maxHealth);
         }
 
         Debug.Log(
@@ -63,15 +67,23 @@ public class PlayerHealth : MonoBehaviour
             maxHealth
         );
 
-        if (animator != null)
-        {
-            animator.SetTrigger("Hurt");
-        }
-
+        // If this hit killed Eevee, go directly to Faint.
+        // Do NOT play Hurt first.
         if (currentHealth <= 0)
         {
             Die();
             return;
+        }
+
+        // Normal non-lethal damage.
+        if (playerController != null)
+        {
+            playerController.PlayHurtSound();
+        }
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Hurt");
         }
 
         StartCoroutine(InvulnerabilityFlash());
@@ -84,6 +96,12 @@ public class PlayerHealth : MonoBehaviour
 
         isDead = true;
         isInvulnerable = true;
+
+        // Play faint sound before disabling PlayerController.
+        if (playerController != null)
+        {
+            playerController.PlayFaintSound();
+        }
 
         // Stop Eevee controls.
         if (playerController != null)
@@ -98,19 +116,20 @@ public class PlayerHealth : MonoBehaviour
         {
             rb.linearVelocity = Vector2.zero;
 
-            // Prevent enemies from physically pushing Eevee.
+            // Prevent anything from physically pushing Eevee.
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
         // Play faint animation.
         if (animator != null)
         {
+            // Make sure Hurt cannot interfere with Faint.
+            animator.ResetTrigger("Hurt");
             animator.SetTrigger("Faint");
         }
 
         StartCoroutine(GameOverDelay());
     }
-
 
     private IEnumerator GameOverDelay()
     {
@@ -128,6 +147,9 @@ public class PlayerHealth : MonoBehaviour
 
     public void Heal(int amount)
     {
+        if (isDead)
+            return;
+
         if (currentHealth >= maxHealth)
             return;
 
@@ -149,8 +171,36 @@ public class PlayerHealth : MonoBehaviour
         );
     }
 
+    public void IncreaseMaxHealth(int amount)
+    {
+        maxHealth += amount;
+
+        currentHealth += amount;
+
+        currentHealth =
+            Mathf.Min(currentHealth, maxHealth);
+
+        if (healthUI != null)
+        {
+            healthUI.SetHealth(
+                currentHealth,
+                maxHealth
+            );
+        }
+
+        Debug.Log(
+            "Eevee Max HP increased! HP: " +
+            currentHealth +
+            "/" +
+            maxHealth
+        );
+    }
+
     private IEnumerator HealFlash()
     {
+        if (spriteRenderer == null)
+            yield break;
+
         Color originalColor = spriteRenderer.color;
 
         spriteRenderer.color = Color.green;
@@ -168,7 +218,6 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer.color = originalColor;
     }
 
-
     private IEnumerator InvulnerabilityFlash()
     {
         isInvulnerable = true;
@@ -177,13 +226,15 @@ public class PlayerHealth : MonoBehaviour
 
         while (timer > 0f)
         {
-            spriteRenderer.enabled = false;
+            if (spriteRenderer != null)
+                spriteRenderer.enabled = false;
 
             yield return new WaitForSeconds(
                 flashInterval
             );
 
-            spriteRenderer.enabled = true;
+            if (spriteRenderer != null)
+                spriteRenderer.enabled = true;
 
             yield return new WaitForSeconds(
                 flashInterval
@@ -192,16 +243,16 @@ public class PlayerHealth : MonoBehaviour
             timer -= flashInterval * 2f;
         }
 
-        spriteRenderer.enabled = true;
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
+
         isInvulnerable = false;
     }
-
 
     public int GetCurrentHealth()
     {
         return currentHealth;
     }
-
 
     public int GetMaxHealth()
     {

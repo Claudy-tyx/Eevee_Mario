@@ -21,12 +21,14 @@ public class EnemyHealth : MonoBehaviour
     private bool isDead;
 
     private GameOverUI gameOverUI;
+    private CrystalManager crystalManager;
 
 
     private void Awake()
     {
         currentHealth = maxHealth;
         gameOverUI = FindFirstObjectByType<GameOverUI>();
+        crystalManager = FindFirstObjectByType<CrystalManager>();
     }
 
 
@@ -87,18 +89,36 @@ public class EnemyHealth : MonoBehaviour
             gameOverUI.AddEnemyDefeated();
         }
 
-        // Stop Caterpie movement.
-        CaterpieController controller =
-            GetComponent<CaterpieController>();
-
-        if (controller != null)
+        if (crystalManager != null)
         {
-            controller.enabled = false;
+            crystalManager.RegisterKill();
         }
 
-        // Stop Caterpie from hurting Eevee immediately.
+        // Stop Caterpie movement.
+        CaterpieController caterpieController =
+            GetComponent<CaterpieController>();
+
+        if (caterpieController != null)
+        {
+            caterpieController.enabled = false;
+        }
+
+        // Stop Butterfree movement.
+        ButterfreeController butterfreeController =
+            GetComponent<ButterfreeController>();
+
+        if (butterfreeController != null)
+        {
+            butterfreeController.enabled = false;
+        }
+
         EnemyContactDamage contactDamage =
-            GetComponentInChildren<EnemyContactDamage>();
+            GetComponentInChildren<EnemyContactDamage>(true);
+
+        if (contactDamage != null)
+        {
+            contactDamage.DisableDamage();
+        }
 
         if (contactDamage != null)
         {

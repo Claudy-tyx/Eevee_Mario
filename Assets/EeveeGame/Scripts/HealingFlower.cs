@@ -2,24 +2,34 @@ using UnityEngine;
 
 public class HealingFlower : MonoBehaviour
 {
-    [SerializeField] private int healAmount = 1;
-
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerHealth player =
+        PlayerHealth playerHealth =
             other.GetComponentInParent<PlayerHealth>();
 
-        if (player == null)
+        if (playerHealth == null)
             return;
 
-        // Don't collect it if Eevee already has full HP.
-        if (player.GetCurrentHealth() >= player.GetMaxHealth())
+        // Don't consume flower at full HP.
+        if (playerHealth.GetCurrentHealth() >=
+            playerHealth.GetMaxHealth())
+        {
             return;
+        }
 
-        // Heal Eevee.
-        player.Heal(healAmount);
+        PlayerStats playerStats =
+            other.GetComponentInParent<PlayerStats>();
 
-        // Remove the flower.
+        int healAmount = 1;
+
+        if (playerStats != null)
+        {
+            healAmount =
+                playerStats.GetFlowerHealAmount();
+        }
+
+        playerHealth.Heal(healAmount);
+
         Destroy(gameObject);
     }
 }
