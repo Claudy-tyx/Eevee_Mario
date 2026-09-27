@@ -204,3 +204,5 @@ MonoBehaviour:
   hitEffectPrefab: {fileID: 7820178840828990492, guid: 4ba506eec80ae4d41a82baab3ee96690, type: 3}
   hitSound: {fileID: 8300000, guid: dfc522582603e4f5b9b99fc786dd8511, type: 3}
   hitSoundVolume: 1.4
+  homingRange: 6
+  homingTurnSpeed: 180

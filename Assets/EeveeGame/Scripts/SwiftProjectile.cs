@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class SwiftProjectile : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class SwiftProjectile : MonoBehaviour
     [SerializeField] private float homingRange = 6f;
     [SerializeField] private float homingTurnSpeed = 180f;
 
+    [Header("Dark Map Light")]
+    [SerializeField] private float lightIntensity = 1.2f;
+    [SerializeField] private float lightInnerRadius = 0.5f;
+    [SerializeField] private float lightOuterRadius = 2.5f;
+
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D projectileCollider;
@@ -39,7 +45,7 @@ public class SwiftProjectile : MonoBehaviour
     private float originalFacingDirection;
 
 
-    private void Awake()
+   private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -48,6 +54,25 @@ public class SwiftProjectile : MonoBehaviour
         if (projectileCollider != null)
         {
             originalColliderOffset = projectileCollider.offset;
+        }
+
+        // Give Swift a light only in dark maps.
+        if (DarkMapLighting.IsActive)
+        {
+            Light2D swiftLight =
+                gameObject.AddComponent<Light2D>();
+
+            swiftLight.lightType =
+                Light2D.LightType.Point;
+
+            swiftLight.intensity =
+                lightIntensity;
+
+            swiftLight.pointLightInnerRadius =
+                lightInnerRadius;
+
+            swiftLight.pointLightOuterRadius =
+                lightOuterRadius;
         }
     }
 

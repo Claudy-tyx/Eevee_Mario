@@ -2458,3 +2458,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hitEffectPrefab: {fileID: 0}
+  hitSound: {fileID: 0}
+  hitSoundVolume: 1
+  homingRange: 6
+  homingTurnSpeed: 180

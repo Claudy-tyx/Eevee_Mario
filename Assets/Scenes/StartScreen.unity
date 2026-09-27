@@ -229,12 +229,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   goldNuggets: 0
   maxHealth: 3
+  currentHealth: 3
   totalKills: 0
   map1Kills: 0
   map2Kills: 0
   map3Kills: 0
-  map2UnlockKills: 20
-  map3UnlockKills: 40
+  map2UnlockKills: 23
+  map3UnlockKills: 43
   map2Unlocked: 0
   map3Unlocked: 0
   map3IntroSeen: 0

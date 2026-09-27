@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Player")]
     [SerializeField] private int maxHealth = 3;
+    [SerializeField] private int currentHealth = 3;
 
 
     // =========================
@@ -176,6 +177,10 @@ public class GameManager : MonoBehaviour
     public void IncreaseMaxHealth(int amount)
     {
         maxHealth += amount;
+        currentHealth += amount;
+
+        currentHealth =
+            Mathf.Min(currentHealth, maxHealth);
 
         OnMaxHealthChanged?.Invoke(maxHealth);
 
@@ -189,6 +194,20 @@ public class GameManager : MonoBehaviour
     public int GetMaxHealth()
     {
         return maxHealth;
+    }
+
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public void SetCurrentHealth(int amount)
+    {
+        currentHealth = Mathf.Clamp(
+            amount,
+            0,
+            maxHealth
+        );
     }
 
 
@@ -398,6 +417,11 @@ public class GameManager : MonoBehaviour
         return runTime;
     }
 
+    public void RestoreFullHealth()
+    {
+        currentHealth = maxHealth;
+    }
+
 
     public bool HasRunStarted()
     {
@@ -487,6 +511,7 @@ public class GameManager : MonoBehaviour
 
         // Player
         maxHealth = 3;
+        currentHealth = 3;
 
         // Kills
         totalKills = 0;

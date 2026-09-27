@@ -66,6 +66,13 @@ public class GameOverUI : MonoBehaviour
         // Unfreeze game first.
         Time.timeScale = 1f;
 
+        // Restore Eevee to full HP before
+        // reloading the current map.
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.RestoreFullHealth();
+        }
+
         SceneManager.LoadScene(
             SceneManager.GetActiveScene().buildIndex
         );

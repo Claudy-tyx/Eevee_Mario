@@ -80,8 +80,15 @@ public class PlayerController : MonoBehaviour
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
 
+        // Always use this Eevee's own PlayerStats.
+        playerStats = GetComponent<PlayerStats>();
+
         if (playerStats == null)
-            playerStats = GetComponent<PlayerStats>();
+        {
+            Debug.LogError(
+                "PlayerController: PlayerStats not found on Player!"
+            );
+        }
     }
 
     private void Update()

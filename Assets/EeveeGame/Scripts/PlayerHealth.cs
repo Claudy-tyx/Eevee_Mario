@@ -29,20 +29,23 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
-        // Load persistent max health from GameManager.
         if (GameManager.Instance != null)
         {
-            maxHealth = GameManager.Instance.GetMaxHealth();
+            maxHealth =
+                GameManager.Instance.GetMaxHealth();
+
+            currentHealth =
+                GameManager.Instance.GetCurrentHealth();
+        }
+        else
+        {
+            currentHealth = maxHealth;
         }
 
-        // Enter each map at full health.
-        currentHealth = maxHealth;
-
-        // Automatically find PlayerController on the same object
-        // if it wasn't assigned manually.
         if (playerController == null)
         {
-            playerController = GetComponent<PlayerController>();
+            playerController =
+                GetComponent<PlayerController>();
         }
     }
 
@@ -61,6 +64,13 @@ public class PlayerHealth : MonoBehaviour
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(currentHealth, 0);
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetCurrentHealth(
+                currentHealth
+            );
+        }
 
         if (healthUI != null)
         {
@@ -168,6 +178,13 @@ public class PlayerHealth : MonoBehaviour
 
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetCurrentHealth(
+                currentHealth
+            );
+        }
 
         if (healthUI != null)
         {

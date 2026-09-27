@@ -31,6 +31,21 @@ public class UpgradeUI : MonoBehaviour
 
     private void Start()
     {
+
+        PlayerStats currentPlayerStats =
+            FindFirstObjectByType<PlayerStats>();
+
+        if (currentPlayerStats != null)
+        {
+            playerStats = currentPlayerStats;
+        }
+        else
+        {
+            Debug.LogError(
+                "UpgradeUI: Could not find PlayerStats!"
+            );
+        }
+    
         if (upgradePanel != null)
             upgradePanel.SetActive(false);
 
@@ -371,6 +386,21 @@ public class UpgradeUI : MonoBehaviour
             selectedChoice == 0
             ? choice1
             : choice2;
+        
+        if (playerStats == null)
+        {
+            playerStats =
+                FindFirstObjectByType<PlayerStats>();
+
+            if (playerStats == null)
+            {
+                Debug.LogError(
+                    "UpgradeUI: PlayerStats not found."
+                );
+
+                return;
+            }
+        }
 
         playerStats.ApplyUpgrade(
             selectedUpgrade.type
