@@ -63,6 +63,10 @@ public class CompletionUI : MonoBehaviour
             runTime
         );
 
+        // Save as high score if this completed run
+        // beats the previous best score.
+        GameManager.Instance.TrySetHighScore(finalScore);
+
 
         // Update UI.
         if (killsText != null)

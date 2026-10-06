@@ -18927,7 +18927,7 @@ Transform:
   m_GameObject: {fileID: 374196270}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 31.8, y: 95.9, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -43824,7 +43824,7 @@ AudioSource:
   m_GameObject: {fileID: 819439752}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 6608599023451115785, guid: 6297e6d5c23974dfe992b40f2040cba8, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 7a7c4f204cfe2439ca6360b890e73b2b, type: 3}
   m_PlayOnAwake: 1
@@ -53760,6 +53760,7 @@ MonoBehaviour:
   map1Kills: 0
   map2Kills: 0
   map3Kills: 0
+  highScore: 0
   map2UnlockKills: 20
   map3UnlockKills: 40
   map2Unlocked: 0
@@ -53771,6 +53772,7 @@ MonoBehaviour:
   deathCount: 0
   runStarted: 0
   runCompleted: 0
+  runData: {fileID: 0}
 --- !u!4 &991450327
 Transform:
   m_ObjectHideFlags: 0
@@ -79234,7 +79236,7 @@ AudioSource:
   m_GameObject: {fileID: 1311798799}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -352742079360400843, guid: 6297e6d5c23974dfe992b40f2040cba8, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -96532,7 +96534,7 @@ MonoBehaviour:
   deathsText: {fileID: 2003540113}
   timeText: {fileID: 1596916827}
   scoreText: {fileID: 570084922}
-  startSceneName: Tutorial
+  startSceneName: StartScreen
 --- !u!1 &1607051431
 GameObject:
   m_ObjectHideFlags: 0

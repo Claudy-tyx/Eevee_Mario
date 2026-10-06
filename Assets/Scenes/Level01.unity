@@ -34209,7 +34209,7 @@ AudioSource:
   m_GameObject: {fileID: 1599058747}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -4179319074183099151, guid: 6297e6d5c23974dfe992b40f2040cba8, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -43310,6 +43310,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6726899234543524605, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -352742079360400843, guid: 6297e6d5c23974dfe992b40f2040cba8, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

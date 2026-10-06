@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int map2Kills = 0;
     [SerializeField] private int map3Kills = 0;
 
+    [Header("High Score")]
+    [SerializeField] private int highScore = 0;
+
 
     // =========================
     // MAP PROGRESSION
@@ -98,6 +101,13 @@ public class GameManager : MonoBehaviour
 
     private bool timerRunning = false;
 
+    // =========================
+    // SCRIPTABLE OBJECT DATA
+    // =========================
+
+    [Header("Scriptable Object Data")]
+    [SerializeField] private RunData runData;
+
 
     // =========================
     // SINGLETON
@@ -115,6 +125,8 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         DontDestroyOnLoad(gameObject);
+
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
     }
 
 
@@ -219,6 +231,11 @@ public class GameManager : MonoBehaviour
     {
         totalKills++;
 
+        if (runData != null)
+        {
+            runData.AddScore(1);
+        }
+
         switch (mapNumber)
         {
             case 1:
@@ -273,6 +290,34 @@ public class GameManager : MonoBehaviour
     public int GetTotalKills()
     {
         return totalKills;
+    }
+
+    public int GetHighScore()
+    {
+        return highScore;
+    }
+
+    public void TrySetHighScore(int score)
+    {
+        if (score <= highScore)
+            return;
+
+        highScore = score;
+
+        PlayerPrefs.SetInt("HighScore", highScore);
+        PlayerPrefs.Save();
+
+        Debug.Log("New High Score: " + highScore);
+    }
+
+    public void ResetHighScore()
+    {
+        highScore = 0;
+
+        PlayerPrefs.SetInt("HighScore", 0);
+        PlayerPrefs.Save();
+
+        Debug.Log("High Score Reset");
     }
 
 
@@ -506,6 +551,12 @@ public class GameManager : MonoBehaviour
 
     public void ResetRun()
     {
+
+        if (runData != null)
+        {
+            runData.ResetRun();
+        }
+
         // Currency
         goldNuggets = 0;
 
@@ -537,6 +588,11 @@ public class GameManager : MonoBehaviour
         runStarted = false;
         runCompleted = false;
         timerRunning = false;
+
+        if (runData != null)
+        {
+            runData.StartRun();
+        }
 
         // Spawn destination
         destinationSpawnID = "";

@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class StartScreen : MonoBehaviour
 {
     [Header("Scene")]
-    [SerializeField] private string tutorialSceneName = "Tutorial";
+    [SerializeField] private string tutorialSceneName = "LoadingScreen";
 
     [Header("Input Delay")]
     [SerializeField] private float inputDelay = 0.25f;
@@ -46,12 +47,25 @@ public class StartScreen : MonoBehaviour
         }
 
 
-        // Mouse click.
+        // Mouse click
         if (Mouse.current != null &&
             (Mouse.current.leftButton.wasPressedThisFrame ||
-             Mouse.current.rightButton.wasPressedThisFrame))
+            Mouse.current.rightButton.wasPressedThisFrame))
         {
-            startPressed = true;
+            // Only block starting if an actual UI Button was clicked.
+            GameObject selectedObject =
+                EventSystem.current != null
+                ? EventSystem.current.currentSelectedGameObject
+                : null;
+
+            bool clickedButton =
+                selectedObject != null &&
+                selectedObject.GetComponent<UnityEngine.UI.Button>() != null;
+
+            if (!clickedButton)
+            {
+                startPressed = true;
+            }
         }
 
 
