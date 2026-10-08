@@ -17,6 +17,11 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private int deathFlashes = 4;
     [SerializeField] private float deathFlashInterval = 0.1f;
 
+    [Header("Death Audio")]
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField, Range(0f, 1f)] private float deathVolume = 0.8f;
+    [SerializeField] private AudioSource audioSource;
+
     private int currentHealth;
     private bool isDead;
 
@@ -82,6 +87,12 @@ public class EnemyHealth : MonoBehaviour
             return;
 
         isDead = true;
+
+        // Play death sound once.
+        if (deathSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(deathSound, deathVolume);
+        }
         // Register this kill with the persistent GameManager.
         if (GameManager.Instance != null)
         {
