@@ -151,7 +151,7 @@ MonoBehaviour:
   progressBarFill: {fileID: 939466673}
   loadingText: {fileID: 1501363077}
   tutorialSceneName: Tutorial
-  minimumLoadTime: 3
+  minimumLoadTime: 1
 --- !u!4 &40997607
 Transform:
   m_ObjectHideFlags: 0

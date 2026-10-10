@@ -33722,14 +33722,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1155301161894284696, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2082540541}
   m_SourcePrefab: {fileID: 100100000, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
 --- !u!114 &2082540537 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7385623757382296936, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
   m_PrefabInstance: {fileID: 2082540536}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2082540539}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7bd3fe15e83bb4eaa996da2de47060ce, type: 3}
@@ -33740,6 +33743,34 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3695844742437270220, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
   m_PrefabInstance: {fileID: 2082540536}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2082540539 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1155301161894284696, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+  m_PrefabInstance: {fileID: 2082540536}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &2082540540 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6726899234543524605, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+  m_PrefabInstance: {fileID: 2082540536}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2082540541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082540539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc67c1150fb704553bf2a70c01539d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EeveeBuffFSMController
+  initialState: {fileID: 11400000, guid: 608a53c7d56c94368a42b2f2f8a38f0c, type: 2}
+  speedMultiplier: 1.5
+  buffDuration: 3
+  audioSource: {fileID: 2082540540}
+  buffStartSound: {fileID: 8300000, guid: b18486006408a45d391799f794e9e0eb, type: 3}
+  buffEndSound: {fileID: 0}
 --- !u!1 &2099360179
 GameObject:
   m_ObjectHideFlags: 0

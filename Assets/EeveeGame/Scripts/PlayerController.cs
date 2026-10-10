@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     
 
     private Rigidbody2D rb;
+    private EeveeBuffFSMController buffFSM;
 
     private float horizontal;
     private bool isGrounded;
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        buffFSM = GetComponent<EeveeBuffFSMController>();
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -167,6 +169,10 @@ public class PlayerController : MonoBehaviour
             Time.time + currentDashCooldown;
 
         dashDirection = facingRight ? 1f : -1f;
+        if (buffFSM != null)
+        {
+            buffFSM.RequestDashBuff();
+        }
     }
 
     private void Land()
@@ -536,6 +542,12 @@ public class PlayerController : MonoBehaviour
         {
             currentMoveSpeed *=
                 playerStats.GetMoveSpeedMultiplier();
+        }
+
+        // Apply temporary speed buff from FSM.
+        if (buffFSM != null)
+        {
+            currentMoveSpeed *= buffFSM.SpeedMultiplier;
         }
 
         rb.linearVelocity = new Vector2(

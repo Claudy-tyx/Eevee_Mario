@@ -29226,7 +29226,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 899895745969221183, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
   m_PrefabInstance: {fileID: 1549434661733907607}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1549434661733907609}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecc07c9f4caf4467bbe241cd80dd4c85, type: 3}
@@ -29237,7 +29237,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7385623757382296936, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
   m_PrefabInstance: {fileID: 1549434661733907607}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1549434661733907609}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7bd3fe15e83bb4eaa996da2de47060ce, type: 3}
@@ -44121,8 +44121,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1155301161894284696, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1549434661733907610}
   m_SourcePrefab: {fileID: 100100000, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+--- !u!82 &1549434661733907608 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6726899234543524605, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+  m_PrefabInstance: {fileID: 1549434661733907607}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1549434661733907609 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1155301161894284696, guid: b666c7e71a27d44c3adff349ae5d222f, type: 3}
+  m_PrefabInstance: {fileID: 1549434661733907607}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1549434661733907610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549434661733907609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc67c1150fb704553bf2a70c01539d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EeveeBuffFSMController
+  initialState: {fileID: 11400000, guid: 608a53c7d56c94368a42b2f2f8a38f0c, type: 2}
+  speedMultiplier: 1.5
+  buffDuration: 3
+  audioSource: {fileID: 1549434661733907608}
+  buffStartSound: {fileID: 8300000, guid: b18486006408a45d391799f794e9e0eb, type: 3}
+  buffEndSound: {fileID: 0}
 --- !u!1001 &2742454021729945899
 PrefabInstance:
   m_ObjectHideFlags: 0
